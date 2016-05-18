@@ -48,6 +48,10 @@ RUN apt-get autoremove -y \
     && apt-get clean \
     && apt-get autoclean
 
+# supervisord
+RUN mkdir -p /var/log/supervisor
+COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
@@ -59,17 +63,15 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 } > "$PHP_INI_DIR/conf.d/opcache-recommended.ini"
 
-
-# Add configuration files
-COPY etc/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY etc/php/magento2.ini "$PHP_INI_DIR/conf.d/magento2.ini"
-COPY etc/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini"
+# PHP
+COPY conf/php/magento2.ini "$PHP_INI_DIR/conf.d/magento2.ini"
+COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini"
 
 ################################################################################
 # Volumes
 ################################################################################
 
-# VOLUME ["/var/www", "/etc/apache2"]
+# VOLUME ["/var/www"]
 
 ################################################################################
 # Ports
@@ -81,8 +83,4 @@ EXPOSE 80 443
 # Entrypoint
 ################################################################################
 
-COPY apache2-foreground /usr/local/bin/
-WORKDIR /var/www/html
-
-
-CMD ["/usr/local/bin/apache2-foreground"]
+ENTRYPOINT ["/usr/bin/supervisord"]

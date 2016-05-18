@@ -10,7 +10,8 @@ services:
       - mysql:mysql
     volumes:
       - ./etc/apache2:/etc/apache2
-      - ./var/log:/var/log
+      - ./logs/apache2:/var/log/apache2
+      - ./logs/supervisor:/var/log/supervisor
   mysql:
     image: mysql
     ports:
