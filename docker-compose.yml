@@ -9,7 +9,8 @@ services:
     links:
       - mysql:mysql
     volumes:
-      - ./etc/apache2:/etc/apache2
+      - ./var/www:/var/www
+      - ./conf/sites-enabled:/etc/apache2/sites-enabled
       - ./logs/apache2:/var/log/apache2
       - ./logs/supervisor:/var/log/supervisor
   mysql:
