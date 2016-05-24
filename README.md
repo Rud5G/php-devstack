@@ -19,7 +19,11 @@
 ## (Re-)Build
 
 ```sh
-sudo docker-compose build
+sudo rm -rf logs/*/* && sudo docker-compose build
+```
+
+```sh
+sudo docker-compose up
 ```
 
 
