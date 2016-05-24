@@ -44,6 +44,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr \
     && docker-php-ext-install intl gd mysqli opcache xsl xmlrpc
 
+
+RUN pecl install xdebug-beta && \
+    docker-php-ext-enable xdebug
+
 RUN apt-get autoremove -y \
     && apt-get clean \
     && apt-get autoclean
