@@ -7,10 +7,6 @@ name: phpstack_web_1
 
 
 ```sh
-export GITHUB_OAUTH=""
-export MAGENTO_REPO_BASIC_AUTH_USER=""
-export MAGENTO_REPO_BASIC_AUTH_PASS=""
-
 composer config -g "github-oauth.github.com" "$GITHUB_OAUTH"
 composer config -g "http-basic.repo.magento.com" "$MAGENTO_REPO_BASIC_AUTH_USER" "$MAGENTO_REPO_BASIC_AUTH_PASS"
 ```
