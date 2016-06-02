@@ -1,15 +1,30 @@
 # php-devstack
 
 
+```sh
+name: phpstack_web_1
+```
+
+
+```sh
+export GITHUB_OAUTH=""
+export MAGENTO_REPO_BASIC_AUTH_USER=""
+export MAGENTO_REPO_BASIC_AUTH_PASS=""
+
+composer config -g "github-oauth.github.com" "$GITHUB_OAUTH"
+composer config -g "http-basic.repo.magento.com" "$MAGENTO_REPO_BASIC_AUTH_USER" "$MAGENTO_REPO_BASIC_AUTH_PASS"
+```
 
 
 
 
 
 
+## (Re-)Build new image
 
-
-
+```sh
+sudo rm -rf logs/*/* && sudo docker build -t dkrud5g/php-devstack .
+```
 
 
 

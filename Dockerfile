@@ -52,6 +52,8 @@ RUN apt-get autoremove -y \
     && apt-get clean \
     && apt-get autoclean
 
+RUN rm -rf /var/lib/apt/lists
+
 # supervisord
 RUN mkdir -p /var/log/supervisor
 COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -67,9 +69,14 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 } > "$PHP_INI_DIR/conf.d/opcache-recommended.ini"
 
+
+
+
 # PHP
+RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 COPY conf/php/magento2.ini "$PHP_INI_DIR/conf.d/magento2.ini"
-COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini"
+
+# COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini"
 
 ################################################################################
 # Volumes

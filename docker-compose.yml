@@ -2,23 +2,40 @@ version: '2'
 services:
   web:
     build: .
+    image: webapp:tag
+    depends_on:
+      - db
+      - redis
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    env_file:
+      - .env
+    environment:
+      - GITHUB_OAUTH
+      - MAGENTO_REPO_BASIC_AUTH_USER
+      - MAGENTO_REPO_BASIC_AUTH_PASS
     ports:
       - "22:22"
       - "80:80"
       - "443:443"
     links:
-      - mysql:mysql
+      - db:mysql
     volumes:
       - ./var/www:/var/www
       - ./conf/sites-enabled:/etc/apache2/sites-enabled
       - ./logs/apache2:/var/log/apache2
       - ./logs/supervisor:/var/log/supervisor
-  mysql:
+  db:
     image: mysql
     ports:
       - "3306:3306"
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=magento2
+      - MYSQL_USER=magento2user
+      - MYSQL_PASSWORD
   redis:
     image: redis
     ports:
