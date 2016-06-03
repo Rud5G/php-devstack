@@ -8,6 +8,9 @@ name: phpstack_web_1
 
 ```sh
 composer config -g "github-oauth.github.com" "$GITHUB_OAUTH"
+```
+
+```sh
 composer config -g "http-basic.repo.magento.com" "$MAGENTO_REPO_BASIC_AUTH_USER" "$MAGENTO_REPO_BASIC_AUTH_PASS"
 ```
 
@@ -38,3 +41,4 @@ sudo docker-compose up
 ```
 
 
+./var/composer_home/auth.json

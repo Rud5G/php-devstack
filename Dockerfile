@@ -45,8 +45,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install intl gd mysqli opcache xsl xmlrpc
 
 
-RUN pecl install xdebug-beta && \
-    docker-php-ext-enable xdebug
+RUN pecl install xdebug-beta
+# && docker-php-ext-enable xdebug
 
 RUN apt-get autoremove -y \
     && apt-get clean \
@@ -75,8 +75,7 @@ RUN { \
 # PHP
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 COPY conf/php/magento2.ini "$PHP_INI_DIR/conf.d/magento2.ini"
-
-# COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini"
+COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini.dist"
 
 ################################################################################
 # Volumes
