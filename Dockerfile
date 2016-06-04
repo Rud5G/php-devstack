@@ -44,7 +44,6 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr \
     && docker-php-ext-install intl gd mysqli opcache xsl xmlrpc
 
-
 RUN pecl install xdebug-beta
 # && docker-php-ext-enable xdebug
 
@@ -69,13 +68,16 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 } > "$PHP_INI_DIR/conf.d/opcache-recommended.ini"
 
-
-
-
 # PHP
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 COPY conf/php/magento2.ini "$PHP_INI_DIR/conf.d/magento2.ini"
 COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini.dist"
+
+################################################################################
+# WORKDIR
+################################################################################
+
+WORKDIR /var/run
 
 ################################################################################
 # Volumes
@@ -93,4 +95,7 @@ EXPOSE 80 443
 # Entrypoint
 ################################################################################
 
-ENTRYPOINT ["/usr/bin/supervisord"]
+COPY entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+

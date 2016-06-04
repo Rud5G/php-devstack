@@ -10,3 +10,4 @@ var/www/*
 
 .env
 !.env.dist
+var/www/writable.dirs

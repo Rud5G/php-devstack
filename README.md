@@ -1,44 +1,25 @@
 # php-devstack
 
+## docker name (prob.)
 
 ```sh
 name: phpstack_web_1
 ```
 
-
 ```sh
-composer config -g "github-oauth.github.com" "$GITHUB_OAUTH"
+cp .env.dist .env
 ```
-
-```sh
-composer config -g "http-basic.repo.magento.com" "$MAGENTO_REPO_BASIC_AUTH_USER" "$MAGENTO_REPO_BASIC_AUTH_PASS"
-```
-
-
-
-
-
-
-## (Re-)Build new image
-
-```sh
-sudo rm -rf logs/*/* && sudo docker build -t dkrud5g/php-devstack .
-```
-
-
-
-
-
 
 ## (Re-)Build
 
 ```sh
-sudo rm -rf logs/*/* && sudo docker-compose build
+sudo docker-compose build
 ```
 
 ```sh
 sudo docker-compose up
 ```
 
+### TODO
 
-./var/composer_home/auth.json
+    ./var/composer_home/auth.json
