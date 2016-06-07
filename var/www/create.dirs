@@ -1,0 +1,5 @@
+/var/www/ToranProxy/app/toran
+/var/www/ToranProxy/app/cache
+/var/www/ToranProxy/app/logs
+/var/www/ToranProxy/web/repo
+/var/git/mirrors

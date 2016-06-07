@@ -1,0 +1,1 @@
+* * * * * cd /var/www/ToranProxy && su -l -c "php /var/www/ToranProxy/bin/cron" -s /bin/bash www-data

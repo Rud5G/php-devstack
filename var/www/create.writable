@@ -1,0 +1,9 @@
+/var/www/ToranProxy/app/toran
+/var/www/ToranProxy/app/cache
+/var/www/ToranProxy/app/logs
+/var/www/ToranProxy/web/repo
+/var/www/ToranProxy/app/bootstrap.php.cache
+/var/www/magento2ce/app/etc
+/var/www/magento2ce/vendor
+/var/www/magento2ce/lib
+/var/www/magento2ce/pub/static
