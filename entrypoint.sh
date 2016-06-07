@@ -2,6 +2,7 @@
 
 set -e
 
+CREATE_CRON=/var/www/create.cron
 CREATE_DIRS=/var/www/create.dirs
 CREATE_WRITABLE=/var/www/create.writable
 
@@ -34,10 +35,22 @@ if [ -f "$CREATE_WRITABLE" ]; then
 fi
 
 
-
 composer config -g "github-oauth.github.com" "$GITHUB_OAUTH"
 
 composer config -g "http-basic.repo.magento.com" "$MAGENTO_REPO_BASIC_AUTH_USER" "$MAGENTO_REPO_BASIC_AUTH_PASS"
+
+composer config --file=/var/www/ToranProxy/app/toran/composer/auth.json "github-oauth.github.com" "$GITHUB_OAUTH"
+composer config --file=/var/www/ToranProxy/app/toran/composer/auth.json "http-basic.repo.magento.com" "$MAGENTO_REPO_BASIC_AUTH_USER" "$MAGENTO_REPO_BASIC_AUTH_PASS"
+
+
+composer config --file=/var/www/ToranProxy/app/toran/composer/config.json "secure-http" "false"
+
+
+
+if [ -f "$CREATE_CRON" ]; then
+    echo "create cron"
+    crontab $CREATE_CRON
+fi
 
 
 # Start services

@@ -16,6 +16,7 @@ RUN echo deb http://dl.hhvm.com/debian jessie main | tee /etc/apt/sources.list.d
 
 # Install modules we need
 RUN apt-get update && apt-get install -y \
+        cron \
         openssh-server \
         supervisor \
         hhvm \
@@ -72,6 +73,10 @@ RUN { \
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 COPY conf/php/magento2.ini "$PHP_INI_DIR/conf.d/magento2.ini"
 COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini.dist"
+
+
+# Cron
+RUN chmod 600 /etc/crontab
 
 ################################################################################
 # WORKDIR
