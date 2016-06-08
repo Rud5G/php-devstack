@@ -2,23 +2,25 @@
 # Base image
 ################################################################################
 
-FROM php:7.0.6-apache
+FROM php:7.0.7-apache
 
 ################################################################################
 # Build instructions
 ################################################################################
 
-RUN a2enmod rewrite expires
+RUN a2enmod rewrite expires ssl setenvif
 
 # Required for HHVM
-RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
-RUN echo deb http://dl.hhvm.com/debian jessie main | tee /etc/apt/sources.list.d/hhvm.list
+# RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
+# RUN echo deb http://dl.hhvm.com/debian jessie main | tee /etc/apt/sources.list.d/hhvm.list
 
 # Install modules we need
 RUN apt-get update && apt-get install -y \
-        openssh-server \
+        wget \
+        vim.tiny \
+        curl \
+        cron \
         supervisor \
-        hhvm \
         mysql-client \
         git \
         locales \
@@ -44,17 +46,23 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr \
     && docker-php-ext-install intl gd mysqli opcache xsl xmlrpc
 
+#        hhvm \
+#        openssh-server \
 
-RUN pecl install xdebug-beta && \
-    docker-php-ext-enable xdebug
+# RUN pecl install xdebug-beta
+#     # && docker-php-ext-enable xdebug
 
 RUN apt-get autoremove -y \
     && apt-get clean \
     && apt-get autoclean
 
+RUN rm -rf /var/lib/apt/lists
+
 # supervisord
 RUN mkdir -p /var/log/supervisor
 COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# PHP
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
@@ -67,9 +75,19 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 } > "$PHP_INI_DIR/conf.d/opcache-recommended.ini"
 
-# PHP
+RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 COPY conf/php/magento2.ini "$PHP_INI_DIR/conf.d/magento2.ini"
-COPY conf/php/xdebug.ini "$PHP_INI_DIR/conf.d/xdebug.ini"
+COPY conf/php/xdebug-custom.ini "$PHP_INI_DIR/conf.d/xdebug-custom.ini"
+
+
+# Cron
+RUN chmod 600 /etc/crontab
+
+################################################################################
+# WORKDIR
+################################################################################
+
+WORKDIR /var/run
 
 ################################################################################
 # Volumes
@@ -87,4 +105,7 @@ EXPOSE 80 443
 # Entrypoint
 ################################################################################
 
-ENTRYPOINT ["/usr/bin/supervisord"]
+COPY entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
